@@ -76,4 +76,5 @@ independent harness implementations.
 ## Changelog
 
 **0.1.1** — `clarify!` replaces `clarify`; `map`/`reduce` now multi-line.
+
 **0.1.0** — Initial version.
