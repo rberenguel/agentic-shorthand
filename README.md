@@ -10,7 +10,7 @@ particular ways. First investigate this, then do that if X otherwise do Y. This
 is eventually annoyingly verbose. This is an attempt at reducing the amount of
 typing, and potentially prove as a useful flow.
 
-This may be a quirk of how I work, and it may not be how you do it. That's fine.
+**This may be a quirk of how I work, and it may not be how you do it.** That's fine.
 Don't use it.
 
 ## A bit of the syntax
