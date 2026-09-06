@@ -1,6 +1,6 @@
 # Agentic shorthand
 
-version: 0.2.0
+version: 0.2.1
 
 A lightweight notation for expressing multi-agent workflows. The constructs
 define a shared vocabulary; the orchestrating model interprets in good faith.
@@ -32,9 +32,9 @@ not inlined text. This applies at every agent-to-agent handoff.
 **Do not provide redundant context.** Anything already processed or irrelevant
 for the next agent must never be passed down. Keep subagent context minimal.
 
-**Write the plan to a file.** Write the full shorthand flow to a file before
-dispatching anything. Reference it by path throughout the run — context windows
-compress; the file does not.
+**Write the plan to a file.** If the user has not provided a plan file, write
+the shorthand flow to a file before dispatching anything. Reference it by path
+throughout the run — context windows compress; the file does not.
 
 **Handle subagent outcomes.** When a subagent fails or returns findings that
 require action not already specified in the flow, the orchestrator either

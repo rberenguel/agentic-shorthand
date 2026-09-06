@@ -75,6 +75,7 @@ independent harness implementations.
 
 ## Changelog
 
+**0.2.1** — Orchestrator no longer re-writes a user-provided plan file.
 **0.2.0** — `goal`/`context` now use `??` syntax. New entry point construct: `fact`. New section "Signaling to the orchestrator": `duck` 🦆, `focus`, `quiz`. New archetypes: `spike`, `scribe`, `self`. Orchestrator mandate extended to cover subagent failure handling.
 **0.1.1** — `clarify!` replaces `clarify`; `map`/`reduce` now multi-line.
 
