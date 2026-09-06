@@ -16,7 +16,7 @@ Don't use it.
 ## A bit of the syntax
 
 ```
-goal: implement feature Foo, fully tested
+goal ?? implement feature Foo, fully tested
 
 flow ?? address all PR comments
   arch ?? investigate the current approach in service Bar
@@ -55,8 +55,8 @@ re-aimed after being pushed. Both lived in `src/combat.js`; neither had an
 obvious root cause.
 
 ```
-goal: two telegraph bugs in CORE BREACH — dead enemies leave markers,
-      enemies re-aim after being pushed
+goal ?? two telegraph bugs in CORE BREACH — dead enemies leave markers,
+         enemies re-aim after being pushed
 
 map arch ?? investigate each bug in src/combat.js
 reduce arch ?? synthesise into a fix plan (clarify!)
@@ -75,6 +75,7 @@ independent harness implementations.
 
 ## Changelog
 
+**0.2.0** — `goal`/`context` now use `??` syntax. New entry point construct: `fact`. New section "Signaling to the orchestrator": `duck` 🦆, `focus`, `quiz`. New archetypes: `spike`, `scribe`, `self`. Orchestrator mandate extended to cover subagent failure handling.
 **0.1.1** — `clarify!` replaces `clarify`; `map`/`reduce` now multi-line.
 
 **0.1.0** — Initial version.

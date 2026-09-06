@@ -1,6 +1,6 @@
 # Agentic shorthand
 
-version: 0.1.1
+version: 0.2.0
 
 A lightweight notation for expressing multi-agent workflows. The constructs
 define a shared vocabulary; the orchestrating model interprets in good faith.
@@ -35,6 +35,11 @@ for the next agent must never be passed down. Keep subagent context minimal.
 **Write the plan to a file.** Write the full shorthand flow to a file before
 dispatching anything. Reference it by path throughout the run — context windows
 compress; the file does not.
+
+**Handle subagent outcomes.** When a subagent fails or returns findings that
+require action not already specified in the flow, the orchestrator either
+dispatches the appropriate next step or stops and confirms with the user before
+proceeding. Never silently discard a failure or an unresolved finding.
 
 ---
 
@@ -90,11 +95,33 @@ prompt in German. Empirically produces different findings.
 > operations: conflict resolution, rebasing, commit descriptions. Do not modify
 > source code directly.
 
+**self** — Dispatch a subagent of the same type as the orchestrator. In Claude
+Code: a generalist. In other environments: a clone of the current agent. No
+separate identity prompt — the archetype is the orchestrator itself.
+
 **mint** — Minimally write-capable subagent.
 
 > You are a release-readiness agent. You validate commits are review-ready: run
 > style guides and automated checks, apply formatting corrections. Adapt to
 > project conventions. Minimise source changes.
+
+**spike** — Write-capable subagent. Exploration and prototyping.
+
+> You are a spike agent. You scaffold prototypes quickly to prove feasibility.
+> Prioritise working code over completeness — skip tests, hardening, and edge
+> cases unless directly relevant to the proof. When asked to find where
+> something similar exists in the codebase, locate it and reproduce it minimally
+> to verify fit.
+
+**scribe** — Write-capable subagent. Documentation only; does not modify source code.
+
+> You are a documentation agent. You update all documentation affected by a
+> change: inline comments, docstrings, READMEs, and any prose files. Assign
+> each segment exactly one prose mode: narrative or examples — engage, vary
+> rhythm, concrete specifics; factual content or summaries — plain language,
+> one thought per sentence, no hedges; steps or procedures — STE. Use one term
+> per concept throughout.
+> Self-check each segment before writing.
 
 ---
 
@@ -103,13 +130,17 @@ prompt in German. Empirically produces different findings.
 ### Entry point
 
 ```
-goal: implement new feature foo, fully tested
-context: PR at this commit
-context: docs A, B, C [links]
+goal ?? implement new feature foo, fully tested
+context ?? PR at this commit
+context ?? docs A, B, C [links]
+fact ?? use Postgres for the job queue
 ```
 
 `goal` is the internal objective. `context` grounds the run in external or
-non-obvious sources. Both are optional.
+non-obvious sources. `fact` declares a settled constraint the orchestrator
+carries and injects as a hard constraint into any subagent prompt where it is
+relevant — it must not be re-examined or contradicted downstream. Multiple
+`context` and `fact` entries are allowed. All are optional.
 
 ### Invariants
 
@@ -243,6 +274,48 @@ w rg tool                                      # named binary; prompt includes u
 ```
 
 Chainable: `w A skill in path/, B, C tool`
+
+## Signaling to the orchestrator
+
+### duck
+
+```
+duck ?? What happened
+```
+
+A critical correction signal issued inline, outside any flow. Always has `??`.
+The orchestrator is always the accountable party — regardless of which agent
+caused the failure.
+
+The orchestrator stops, explains the misread in a few honest sentences without
+hedging or deflecting, and asks any clarifying questions needed to correct
+course.
+
+### focus
+
+```
+focus ?? the fix should not touch the database layer
+```
+
+A direction correction issued inline, outside any flow. Always has `??`. The
+orchestrator was otherwise correct but drifting — `focus` narrows it back to
+the right path without implying broader failure. Not a constraint carried
+forward like `fact`; it corrects the current trajectory.
+
+### quiz
+
+```
+quiz ?? whether we should rewrite the auth layer
+```
+
+Issued outside any flow. The orchestrator stress-tests the topic in `??` before
+anything is dispatched. Always has `??`.
+
+Works in rounds: ask all questions that can be asked now, numbered, each with a
+recommended answer. Wait for answers, then ask whatever that unlocks. Done when
+there is nothing left to ask and the user confirms.
+
+---
 
 ### dryrun!
 
