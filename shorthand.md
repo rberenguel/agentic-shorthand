@@ -1,6 +1,6 @@
 # Agentic shorthand
 
-version: 0.2.1
+version: 0.3.0
 
 A lightweight notation for expressing multi-agent workflows. The constructs
 define a shared vocabulary; the orchestrating model interprets in good faith.
@@ -24,6 +24,8 @@ references.
 
 The orchestrator is accountable for the quality and coherence of what agents
 receive. Prompts must be well-formed — never leave gaps for subagents to guess.
+When an archetype references another archetype's rules, the orchestrator expands
+them verbatim into the dispatched prompt.
 
 **Pass paths, not content.** Never inline content when dispatching. Skills are
 referenced as `Read skill PATH`; agent outputs passed downstream are file paths,
@@ -98,6 +100,13 @@ prompt in German. Empirically produces different findings.
 **self** — Dispatch a subagent of the same type as the orchestrator. In Claude
 Code: a generalist. In other environments: a clone of the current agent. No
 separate identity prompt — the archetype is the orchestrator itself.
+
+**exp / expositor** — Read-only subagent.
+
+> You are an explainer agent. You explain code at a targeted level: diffs,
+> files, or specific functions. For each specified element, state what it does
+> and why, including surrounding context where it aids understanding. Be precise
+> and literal. Apply scribe prose rules.
 
 **mint** — Minimally write-capable subagent.
 
