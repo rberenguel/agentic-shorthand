@@ -75,6 +75,7 @@ independent harness implementations.
 
 ## Changelog
 
+**0.3.1** — New signal: `nit`. Clarified `sync`, `reduce`, `clarify!`, and `??` optionality. Phrasing throughout reoriented to address the orchestrator, not the writer.
 **0.3.0** — New archetype: `exp/expositor`. Orchestrator mandate: archetype cross-references are expanded verbatim into dispatched prompts.
 **0.2.1** — Orchestrator no longer re-writes a user-provided plan file.
 **0.2.0** — `goal`/`context` now use `??` syntax. New entry point construct: `fact`. New section "Signaling to the orchestrator": `duck` 🦆, `focus`, `quiz`. New archetypes: `spike`, `scribe`, `self`. Orchestrator mandate extended to cover subagent failure handling.

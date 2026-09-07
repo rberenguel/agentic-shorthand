@@ -1,6 +1,6 @@
 # Agentic shorthand
 
-version: 0.3.0
+version: 0.3.1
 
 A lightweight notation for expressing multi-agent workflows. The constructs
 define a shared vocabulary; the orchestrating model interprets in good faith.
@@ -13,7 +13,7 @@ Two rules govern execution:
 - **Natural language conditions are a feature.**
   `if one comment is about style guide` is preferable to a formal predicate —
   the orchestrator evaluates it against whatever shape the output took, without
-  the writer predicting that shape upfront.
+  requiring the shape to be predicted upfront.
 
 ## Orchestrator mandate
 
@@ -91,7 +91,8 @@ prompt in German. Empirically produces different findings.
 
 **inq team / inquisitor team** — `inquisitor` and `de_inquisitor` in parallel.
 
-**sync** — VCS-write subagent.
+**sync** — VCS-write subagent. The orchestrator must always delegate version
+control operations to `sync`; it must never perform git/jj operations directly.
 
 > You are a VCS agent with write access to repository state. You handle git/jj
 > operations: conflict resolution, rebasing, commit descriptions. Do not modify
@@ -168,9 +169,9 @@ arch ?? investigate how we foo the bar in service Baz
 
 `??` separates any construct or identifier from its natural-language
 clarification. The orchestrator expands the right side into a full
-self-contained prompt before dispatching. In practice: what/how tends to appear
-on the left, why on the right — not a strict rule, but a useful guide for
-readability.
+self-contained prompt before dispatching. `??` may be absent when the task is
+self-evident; the orchestrator constructs the prompt from context. What/how
+tends to appear on the left, why on the right.
 
 ### Flow
 
@@ -192,9 +193,9 @@ flow preflight ?? address all PR comments
   fix  ?? apply fixes
 ```
 
-`clarify!` appended to any step forces the orchestrator to articulate its
-reading and wait for confirmation before proceeding. Use when the intent is
-high-level or the stakes of misreading are high.
+`clarify!` appended to any step causes the orchestrator to stop when that step
+is reached, explain how it will unfold, and wait for confirmation before
+proceeding.
 
 ### Sequencing
 
@@ -232,9 +233,9 @@ map arch ?? check each subfolder and explain what it does
 reduce arch ?? full description to conversation
 ```
 
-`map` runs one agent instance per item. `reduce` collects all outputs and
-synthesises. Each line carries its own `??`. `clarify!` on the reduce line
-pauses for confirmation before the next step.
+`map` runs one agent instance per item. `reduce` dispatches a subagent with
+the map outputs — the orchestrator never synthesises reduce output directly.
+Each line can carry its own `??`.
 
 ### chain
 
@@ -285,6 +286,16 @@ w rg tool                                      # named binary; prompt includes u
 Chainable: `w A skill in path/, B, C tool`
 
 ## Signaling to the orchestrator
+
+### nit
+
+```
+nit ?? you skipped the edge case in the summary
+```
+
+A soft correction issued inline, outside any flow. Always has `??`. Minor — no
+incompetence implied, no frustration. The orchestrator acknowledges and adjusts
+without explanation.
 
 ### duck
 
